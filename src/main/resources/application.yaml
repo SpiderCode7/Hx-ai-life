@@ -7,16 +7,48 @@ spring:
       chat:
         options:
           model: qwen-plus
+#     向量模型配置
+      embedding:
+        options:
+          model: text-embedding-v3
+    mcp:
+      client:
+        enabled: true
+        request-timeout: 60s
+        type: SYNC
+        stdio:
+          servers-configuration: classpath:mcp-servers.json
+
+    vectorstore:
+      elasticsearch:
+        initialize-schema: true
+        index-name: life-app-documents
+        dimensions: 1024
+        similarity: cosine
   data:
     mongodb:
       uri: mongodb://localhost:27017/hx_ai_life
+  elasticsearch:
+    uris: http://localhost:9201
+#      username:
+#      password:
+
 
 server:
   port: 8321
   servlet:
     context-path: /api
 
-
+# 小红书 Appium 自动化配置。启动 Appium Server 后即可使用。
+hxy:
+  automation:
+    xhs:
+      appium-server-url: http://127.0.0.1:4723
+      device-id: emulator-5554
+      package-name: com.xingin.xhs
+      wait-timeout-seconds: 10
+      operation-delay-ms: 1500
+      screen-width: 910
 
 # springdoc-openapi项目配置
 springdoc:
@@ -28,10 +60,16 @@ springdoc:
     path: /v3/api-docs
   group-configs:
     - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.hxy.hxailife.controller
+      paths-to-match:
+       - '/**'
+      packages-to-scan:
+       - com.hxy.hxailife.controller
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
   enable: true
   setting:
     language: zh_cn
+
+# Tools-Api
+tools:
+  search-api-key: ${hxy.search-api-key}

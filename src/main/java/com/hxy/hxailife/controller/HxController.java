@@ -43,4 +43,10 @@ public class HxController {
         String result = lifeApp.result(message,"1");
         return result;
     }
+
+    @GetMapping("/AgentRag")
+    private String AgentRag(String message){
+        String result = lifeApp.resultWithRag(message,"2");
+        return result;
+    }
 }
