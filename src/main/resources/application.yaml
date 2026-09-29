@@ -50,6 +50,7 @@ hxy:
       operation-delay-ms: 1500
       screen-width: 910
 
+
 # springdoc-openapi项目配置
 springdoc:
   swagger-ui:
@@ -73,3 +74,5 @@ knife4j:
 # Tools-Api
 tools:
   search-api-key: ${hxy.search-api-key}
+  dianping:
+    api-url: http://127.0.0.1:8000
