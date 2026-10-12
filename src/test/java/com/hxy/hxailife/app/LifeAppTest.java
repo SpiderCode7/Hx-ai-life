@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -25,13 +27,12 @@ class LifeAppTest {
     void result() {
     }
 
-    @Test
-    void resultUseMCP() {
-        String message = """
-        必须调用高德地图 MCP 工具进行查询，不要根据模型知识直接回答。
-        查询广州江南西地铁站附近的火锅店，推荐三家给我
-        """;
-        String result = lifeApp.resultUseMCP(message,"3");
-        System.out.println(result);
-    }
+//    @Test
+//    void resultUseMCP() {
+//        String message = """
+//        你可以调用高德的mcp帮我查看广州西塱地铁站附近的海底捞在哪吗？然后给出通勤方案，看一下过去要多久。然后调用小红书的mcp找出这家海底捞的帖子，把帖子的链接发给我。再调用大众点评的工具，帮我找出这家海底捞的链接。最后告诉我所有的mcp和工具是否都成功用上了。最后告诉我李思曼是谁？
+//        """;
+//        String uuid = UUID.randomUUID().toString();
+//        String result = lifeApp.resultUseMCPwithRag(message,uuid);
+//    }
 }
