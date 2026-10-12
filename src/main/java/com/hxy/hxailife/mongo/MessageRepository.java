@@ -1,5 +1,6 @@
 package com.hxy.hxailife.mongo;
 
+import com.hxy.hxailife.mongo.entity.MessageDoc;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

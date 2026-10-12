@@ -1,6 +1,6 @@
 package com.hxy.hxailife.chatMemoryRepository;
 
-import com.hxy.hxailife.mongo.MessageDoc;
+import com.hxy.hxailife.mongo.entity.MessageDoc;
 import com.hxy.hxailife.mongo.MessageRepository;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.AssistantMessage;

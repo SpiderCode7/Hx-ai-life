@@ -107,11 +107,12 @@ public class LifeApp {
     @Resource
     private ToolCallbackProvider toolCallbackProvider;
 
-    public String resultUseMCP(String message,String chatId){
-        ChatResponse chatResponse = chatClient.prompt()
+    public String resultUseMCPwithRag(String message,String chatId){
+        ChatResponse chatResponse = chatClientRag.prompt()
                 .user(message)
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, chatId))
                 .toolCallbacks(toolCallbackProvider)
+                .toolCallbacks(allTools)
                 .call()
                 .chatResponse();
         return chatResponse.getResult().getOutput().getText();

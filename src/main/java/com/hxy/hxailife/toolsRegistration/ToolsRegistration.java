@@ -1,6 +1,7 @@
 package com.hxy.hxailife.toolsRegistration;
 
 import cn.hutool.core.builder.Builder;
+import com.hxy.hxailife.tools.DianpingTool;
 import com.hxy.hxailife.tools.WebScrapingTool;
 import com.hxy.hxailife.tools.WebSearchTools;
 import org.springframework.ai.support.ToolCallbacks;
@@ -21,6 +22,9 @@ public class ToolsRegistration {
     @Autowired
     private WebScrapingTool webScrapingTool;
 
+    @Autowired
+    private DianpingTool dianpingTool;
+
 //    @Value("${tools.search-api-key}")
 //    private String searchApi;
 //
@@ -32,7 +36,8 @@ public class ToolsRegistration {
 //        WebSearchTools webSearchTools = new WebSearchTools(restClientBuilder,searchApi);
         return ToolCallbacks.from(
                 webScrapingTool,
-                webSearchTools
+                webSearchTools,
+                dianpingTool
         );
     }
 }

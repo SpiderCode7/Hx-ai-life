@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: Hx-ai-life
   ai:
@@ -26,8 +28,20 @@ spring:
         dimensions: 1024
         similarity: cosine
   data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      connect-timeout: 2s
+      timeout: 2s
     mongodb:
       uri: mongodb://localhost:27017/hx_ai_life
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/hx_ai_life?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Singapore}
+    username: ${hxy.MYSQL_USERNAME}
+    password: ${hxy.MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   elasticsearch:
     uris: http://localhost:9201
 #      username:
@@ -39,17 +53,14 @@ server:
   servlet:
     context-path: /api
 
-# 小红书 Appium 自动化配置。启动 Appium Server 后即可使用。
-hxy:
-  automation:
-    xhs:
-      appium-server-url: http://127.0.0.1:4723
-      device-id: emulator-5554
-      package-name: com.xingin.xhs
-      wait-timeout-seconds: 10
-      operation-delay-ms: 1500
-      screen-width: 910
-
+# Sa-Token 登录状态配置。sa-token-redis-jackson 会将 Token、会话和注销状态持久化到 Redis。
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 604800
+  is-concurrent: true
+  is-share: false
+  is-log: true
 
 # springdoc-openapi项目配置
 springdoc:
@@ -67,7 +78,7 @@ springdoc:
        - com.hxy.hxailife.controller
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
-  enable: true
+  enable: false
   setting:
     language: zh_cn
 

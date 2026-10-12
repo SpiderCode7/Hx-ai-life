@@ -1,4 +1,4 @@
-package com.hxy.hxailife.mongo;
+package com.hxy.hxailife.mongo.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -15,6 +15,8 @@ public class MessageDoc {
 
     /** 会话 ID，对应 ChatMemory.CONVERSATION_ID */
     private String conversationId;
+
+    private Long userId;
 
     /** user / assistant / system */
     private String role;
