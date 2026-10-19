@@ -87,3 +87,6 @@ tools:
   search-api-key: ${hxy.search-api-key}
   dianping:
     api-url: http://127.0.0.1:8000
+
+amap:
+  web-key: ${hxy.AMAP_WEB_API_KEY}

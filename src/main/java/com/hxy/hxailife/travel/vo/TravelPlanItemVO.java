@@ -24,6 +24,12 @@ public class TravelPlanItemVO {
 
     private String place;
 
+    private String placeAddress;
+
+    private String placePoiId;
+    private Double placeLongitude;
+    private Double placeLatitude;
+
     private LocalTime startTime;
 
     private LocalTime endTime;

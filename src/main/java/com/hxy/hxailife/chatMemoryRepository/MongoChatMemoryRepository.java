@@ -1,6 +1,8 @@
 package com.hxy.hxailife.chatMemoryRepository;
 
 import com.hxy.hxailife.mongo.entity.MessageDoc;
+import com.hxy.hxailife.mongo.entity.ConversationDoc;
+import com.hxy.hxailife.mongo.ConversationRepository;
 import com.hxy.hxailife.mongo.MessageRepository;
 import org.springframework.ai.chat.memory.ChatMemoryRepository;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -18,10 +20,13 @@ public class MongoChatMemoryRepository implements ChatMemoryRepository {
 
     private final MessageRepository repository;
     private final MongoTemplate mongoTemplate;
+    private final ConversationRepository conversationRepository;
 
-    public MongoChatMemoryRepository(MessageRepository repository, MongoTemplate mongoTemplate) {
+    public MongoChatMemoryRepository(MessageRepository repository, MongoTemplate mongoTemplate,
+                                     ConversationRepository conversationRepository) {
         this.repository = repository;
         this.mongoTemplate = mongoTemplate;
+        this.conversationRepository = conversationRepository;
     }
 
     @Override
@@ -42,9 +47,13 @@ public class MongoChatMemoryRepository implements ChatMemoryRepository {
 
     @Override
     public void saveAll(String conversationId, List<Message> messages) {
+        // 保存时从会话取得所属用户，一次查询即可；不依赖当前请求线程的登录状态。
+        Long userId = conversationRepository.findById(conversationId)
+                .map(ConversationDoc::getUserId)
+                .orElseThrow(() -> new IllegalStateException("会话不存在或未关联用户，无法保存聊天记忆"));
         repository.deleteByConversationId(conversationId);
         repository.saveAll(messages.stream()
-                .map(message -> toMessageDoc(conversationId, message))
+                .map(message -> toMessageDoc(conversationId, userId, message))
                 .toList());
     }
 
@@ -53,9 +62,10 @@ public class MongoChatMemoryRepository implements ChatMemoryRepository {
         repository.deleteByConversationId(conversationId);
     }
 
-    private static MessageDoc toMessageDoc(String conversationId, Message message) {
+    private static MessageDoc toMessageDoc(String conversationId, Long userId, Message message) {
         MessageDoc doc = new MessageDoc();
         doc.setConversationId(conversationId);
+        doc.setUserId(userId);
         doc.setRole(message.getMessageType().name().toLowerCase());
         doc.setContent(message.getText());
         return doc;

@@ -7,6 +7,7 @@ import com.hxy.hxailife.travel.vo.TravelPlanGenerateVO;
 import com.hxy.hxailife.travel.vo.TravelPlanGenerationVO;
 import com.hxy.hxailife.travel.vo.TravelPlanDetailVO;
 import com.hxy.hxailife.travel.dto.TravelPlanSaveDTO;
+import com.hxy.hxailife.travel.dto.TravelPlanGenerateOptionsDTO;
 import com.hxy.hxailife.travel.vo.TravelPlanSummaryVO;
 import com.hxy.hxailife.travel.vo.TravelPlanHistoryVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,17 +54,27 @@ public class TravelPlanController {
         return generationService.submit(request);
     }
 
-    @PostMapping("/{id}/generations")
+    @PostMapping("/{planId}/generations/{generationId}/change")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "按已保存表单继续生成，每份表单最多保存 5 套，暂不保证推荐去重")
-    public TravelPlanGenerateVO generateForPlan(@PathVariable Long id) {
-        return generationService.generate(id);
+    @Operation(summary = "根据当前攻略换一套，后端自动排除该表单历史已使用候选")
+    public TravelPlanGenerateVO change(@PathVariable Long planId, @PathVariable Long generationId,
+                                       @Valid @RequestBody(required = false) TravelPlanGenerateOptionsDTO options) {
+        return options == null || (options.getXhsEnabled() == null && options.getDianpingEnabled() == null)
+                ? generationService.change(planId, generationId)
+                : generationService.change(planId, generationId, options);
     }
 
     @GetMapping("/{id}/generations")
     @Operation(summary = "查看表单的全部成功攻略，按创建时间正序")
     public List<TravelPlanGenerationVO> generations(@PathVariable Long id) {
         return generationService.list(id);
+    }
+
+    @DeleteMapping("/{planId}/generations/{generationId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "删除该表单下指定攻略及其节点，包含该攻略的收藏状态")
+    public void deleteGeneration(@PathVariable Long planId, @PathVariable Long generationId) {
+        generationService.delete(planId, generationId);
     }
 
     @GetMapping

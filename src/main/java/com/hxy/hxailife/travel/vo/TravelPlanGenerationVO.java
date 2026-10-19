@@ -29,7 +29,8 @@ public class TravelPlanGenerationVO {
     @NotBlank
     @Size(max = 255)
     private String title;
-    private String summary;
+    /** 整份攻略的推荐理由。 */
+    private String recommendationReason;
     @DecimalMin("0")
     @Digits(integer = 8, fraction = 2)
     private BigDecimal totalCostPerPerson;

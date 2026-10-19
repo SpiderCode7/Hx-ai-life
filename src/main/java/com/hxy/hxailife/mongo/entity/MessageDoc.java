@@ -21,6 +21,9 @@ public class MessageDoc {
     /** user / assistant / system */
     private String role;
 
+    //当前攻略id
+    private Long generationId;
+
     /** 消息内容 */
     private String content;
 

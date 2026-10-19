@@ -1,6 +1,7 @@
 package com.hxy.hxailife.travel.vo;
 
 import com.hxy.hxailife.travel.GenerationItemType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ import java.time.LocalTime;
 public class TravelPlanGenerationItemVO {
 
     private Long id;
+    @Schema(nullable = true, description = "普通聊天为空，攻略微调时为攻略结果 ID")
     private Long generationId;
     @NotNull
     private GenerationItemType type;
@@ -37,6 +39,8 @@ public class TravelPlanGenerationItemVO {
     @Size(max = 500)
     private String address;
     private String placeInfo;
+    @Size(max = 2048)
+    private String imageUrl;
     @Size(max = 50)
     private String poiSource;
     @Size(max = 128)
@@ -51,7 +55,6 @@ public class TravelPlanGenerationItemVO {
     @DecimalMin("0")
     @Digits(integer = 8, fraction = 2)
     private BigDecimal transitCostPerPerson;
-    private String recommendationReason;
     @Size(max = 500)
     private String xhsSearchQuery;
     @Size(max = 2048)

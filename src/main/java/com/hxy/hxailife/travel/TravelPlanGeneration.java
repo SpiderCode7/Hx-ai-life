@@ -26,7 +26,8 @@ public class TravelPlanGeneration {
     /** 推荐节点组合 SHA-256，不以文案措辞判断是否重复。 */
     private String recommendationFingerprint;
     private String title;
-    private String summary;
+    /** 整份攻略的推荐理由。 */
+    private String recommendationReason;
     private BigDecimal totalCostPerPerson;
     private String tips;
     /** 收藏具体这一版结果；收藏页可直接查询，不随换一套或微调自动转移。 */

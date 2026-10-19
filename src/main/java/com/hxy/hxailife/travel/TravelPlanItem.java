@@ -23,6 +23,10 @@ public class TravelPlanItem {
     private Integer sortOrder;
     private String name;
     private String place;
+    private String placeAddress;
+    private String placePoiId;
+    private Double placeLongitude;
+    private Double placeLatitude;
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer peopleNum;

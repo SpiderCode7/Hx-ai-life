@@ -26,6 +26,8 @@ public class TravelPlanGenerationItem {
     private String name;
     private String address;
     private String placeInfo;
+    /** 高德 POI 详情中的首张地点图片 URL；起点和终点为空。 */
+    private String imageUrl;
     /** POI ID 必须与来源一起比较；没有可靠 ID 时使用名称和地址辅助匹配。 */
     private String poiSource;
     private String poiId;
@@ -36,7 +38,6 @@ public class TravelPlanGenerationItem {
     private String transitPlan;
     private Integer transitMinutes;
     private BigDecimal transitCostPerPerson;
-    private String recommendationReason;
     private String xhsSearchQuery;
     private String xhsSearchUrl;
     private String dianpingUrl;

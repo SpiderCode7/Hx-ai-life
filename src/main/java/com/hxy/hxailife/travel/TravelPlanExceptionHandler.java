@@ -2,6 +2,9 @@ package com.hxy.hxailife.travel;
 
 import com.hxy.hxailife.controller.TravelPlanController;
 import com.hxy.hxailife.controller.TravelPlanFavoriteController;
+import com.hxy.hxailife.controller.TravelPlanRefineController;
+import com.hxy.hxailife.controller.ChatController;
+import com.hxy.hxailife.controller.LocationController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
-@RestControllerAdvice(assignableTypes = {TravelPlanController.class, TravelPlanFavoriteController.class})
+@RestControllerAdvice(assignableTypes = {TravelPlanController.class, TravelPlanFavoriteController.class,
+        TravelPlanRefineController.class, ChatController.class, LocationController.class})
 public class TravelPlanExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)

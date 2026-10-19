@@ -14,7 +14,7 @@ public class RecentRecommendationDTO {
 
     private Long generationId;
     private String recommendationFingerprint;
-    private String summary;
+    private String recommendationReason;
     /** 按实际行程顺序保存去哪/吃啥节点，起点和终点不参与去重。 */
     private List<RecentRecommendationItemDTO> items;
 }

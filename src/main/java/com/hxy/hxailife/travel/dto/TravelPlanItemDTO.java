@@ -30,6 +30,14 @@ public class TravelPlanItemDTO {
     @Size(max = 255, message = "卡片地点不能超过 255 个字符")
     private String place;
 
+    @Size(max = 500, message = "卡片地点地址不能超过 500 个字符")
+    private String placeAddress;
+
+    @Size(max = 128, message = "卡片地点 POI ID 不能超过 128 个字符")
+    private String placePoiId;
+    private Double placeLongitude;
+    private Double placeLatitude;
+
     private LocalTime startTime;
 
     private LocalTime endTime;

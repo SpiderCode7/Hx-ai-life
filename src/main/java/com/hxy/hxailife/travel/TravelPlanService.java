@@ -67,7 +67,12 @@ public class TravelPlanService {
     public TravelPlanDetailVO update(Long id, TravelPlanSaveDTO request) {
         Long userId = StpUtil.getLoginIdAsLong();
         TravelPlan plan = requireOwnedPlan(id, userId, true);
+        String generatedTitle = plan.getTitle();
         applyRequest(plan, request);
+        // 标题由 AI 生成，前端不再提交标题时保留历史标题。
+        if (request.getTitle() == null || request.getTitle().isBlank()) {
+            plan.setTitle(generatedTitle);
+        }
         plan.setUpdatedAt(LocalDateTime.now());
         if (planMapper.update(plan, new LambdaUpdateWrapper<TravelPlan>()
                 .eq(TravelPlan::getId, id).eq(TravelPlan::getUserId, userId)) == 0) {
@@ -118,6 +123,10 @@ public class TravelPlanService {
     private TravelPlanDetailVO toDetailVO(TravelPlan plan, List<TravelPlanItem> items) {
         TravelPlanDetailVO vo = new TravelPlanDetailVO();
         BeanUtils.copyProperties(plan, vo);
+        List<TravelMode> modes = plan.getTravelModes() == null || plan.getTravelModes().isEmpty()
+                ? List.of(TravelMode.AUTO) : plan.getTravelModes();
+        vo.setTravelModes(modes);
+        vo.setTravelMode(modes.getFirst());
         vo.setItems(items.stream().map(item -> {
             TravelPlanItemVO itemVO = new TravelPlanItemVO();
             BeanUtils.copyProperties(item, itemVO);
@@ -136,12 +145,30 @@ public class TravelPlanService {
         plan.setTitle(request.getTitle());
         plan.setPlanDate(request.getPlanDate());
         plan.setStartPlace(request.getStartPlace().trim());
+        plan.setStartPlaceAddress(trim(request.getStartPlaceAddress()));
+        plan.setStartPlacePoiId(trim(request.getStartPlacePoiId()));
+        plan.setStartPlaceLongitude(request.getStartPlaceLongitude());
+        plan.setStartPlaceLatitude(request.getStartPlaceLatitude());
         plan.setStartTime(request.getStartTime());
         plan.setEndPlace(request.getEndPlace().trim());
+        plan.setEndPlaceAddress(trim(request.getEndPlaceAddress()));
+        plan.setEndPlacePoiId(trim(request.getEndPlacePoiId()));
+        plan.setEndPlaceLongitude(request.getEndPlaceLongitude());
+        plan.setEndPlaceLatitude(request.getEndPlaceLatitude());
         plan.setLatestReturnTime(request.getLatestReturnTime());
         plan.setPeopleNum(request.getPeopleNum());
-        plan.setTravelMode(request.getTravelMode() == null ? TravelMode.AUTO : request.getTravelMode());
+        List<TravelMode> modes = request.getTravelModes() == null
+                ? new ArrayList<>() : new ArrayList<>(request.getTravelModes());
+        if (modes.isEmpty() && request.getTravelMode() != null) {
+            modes.add(request.getTravelMode());
+        }
+        if (modes.isEmpty()) {
+            modes.add(TravelMode.AUTO);
+        }
+        plan.setTravelModes(modes.stream().distinct().toList());
+        plan.setTravelMode(modes.getFirst());
         plan.setDianpingEnabled(request.getDianpingEnabled() == null ? 0 : request.getDianpingEnabled());
+        plan.setXhsEnabled(request.getXhsEnabled() == null ? 0 : request.getXhsEnabled());
         plan.setSpecialRequirements(request.getSpecialRequirements());
     }
 
@@ -155,6 +182,10 @@ public class TravelPlanService {
             item.setSortOrder(i);
             item.setName(request.getName());
             item.setPlace(request.getPlace());
+            item.setPlaceAddress(trim(request.getPlaceAddress()));
+            item.setPlacePoiId(trim(request.getPlacePoiId()));
+            item.setPlaceLongitude(request.getPlaceLongitude());
+            item.setPlaceLatitude(request.getPlaceLatitude());
             item.setStartTime(request.getStartTime());
             item.setEndTime(request.getEndTime());
             item.setPeopleNum(request.getPeopleNum());
@@ -166,5 +197,9 @@ public class TravelPlanService {
             items.add(item);
         }
         return items;
+    }
+
+    private String trim(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
     }
 }
